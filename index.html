@@ -48,7 +48,7 @@
   </style>
 </head>
 <body>
-  <h1>Card Probabilities in Specific Position</h1>
+  <h1>Study of Card Probabilities in Specific Position</h1>
 
   <div id="bottomCardSection">
     <label for="bottomCard">Enter bottom card:</label><br>
@@ -68,12 +68,10 @@
 
   <script>
     const memorandumStack = [
-      "J♠", "7♣", "10♥", "A♦", "4♣", "7♥", "4♦", "A♠", "4♥", "7♦",
-      "4♠", "A♥", "10♦", "7♠", "J♣", "K♦", "10♠", "8♣", "J♥", "A♣",
-      "K♠", "5♣", "8♥", "2♦", "Q♠", "K♥", "9♣", "Q♥", "6♣", "9♥",
-      "2♦", "3♣", "6♥", "5♦", "2♠", "3♥", "8♦", "5♠", "K♣", "J♦",
-      "8♠", "10♣", "2♣", "5♥", "6♦", "3♠", "2♥", "9♦", "6♠", "Q♣",
-      "Q♦", "9♠"
+      "J♠","7♣","10♥","A♦","4♣","7♥","4♦","A♠","4♥","7♦","4♠","A♥","10♦","7♠","J♣",
+      "K♦","10♠","8♣","J♥","A♣","K♠","5♣","8♥","2♦","Q♠","K♥","9♣","Q♥","6♣","9♥",
+      "2♦","3♣","6♥","5♦","2♠","3♥","8♦","5♠","K♣","J♦","8♠","10♣","2♣","5♥",
+      "6♦","3♠","2♥","9♦","6♠","Q♣","Q♦","9♠"
     ];
 
     const suits = ['♦', '♣', '♥', '♠'];
@@ -92,7 +90,7 @@
       }
     }
 
-    function getmemorandumIndex(card) {
+    function getStackIndex(card) {
       return memorandumStack.indexOf(card) + 1;
     }
 
@@ -114,8 +112,8 @@
         return;
       }
 
-      const namedCardPos = getMemorandumStackIndex(namedCard);
-      const bottomCardPos = getMemorandumStackIndex(bottomCard);
+      const namedCardPos = getStackIndex(namedCard);
+      const bottomCardPos = getStackIndex(bottomCard);
       const targetPos = namedCardPos - namedNumber;
       const cardToCutPos = ((targetPos - bottomCardPos + 52) % 52) || 52;
       const cardToCut = memorandumStack[(cardToCutPos - 1 + bottomCardPos) % 52];
