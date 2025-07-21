@@ -48,21 +48,21 @@
   </style>
 </head>
 <body>
-  <h1>Theory of Card Probabilities in Specific Position</h1>
+  <h1>Studi Tentang Probabilitas Kartu Pada Lokasi Tertentu</h1>
 
   <div id="bottomCardSection">
-    <label for="bottomCard">Enter bottom card:</label><br>
+    <label for="bottomCard">Kartu Bawah:</label><br>
     <select id="bottomCard" onchange="hideBottomCard()"></select>
-  </div>
+  </div>  
 
   <br>
-  <label for="namedCard">Spectator's named card:</label><br>
+  <label for="namedCard">Kartu Pilihan:</label><br>
   <select id="namedCard"></select><br><br>
 
-  <label for="namedNumber">Spectator's named number (1–52):</label><br>
+  <label for="namedNumber">Angka Pilihan (1–52):</label><br>
   <input type="number" id="namedNumber" min="1" max="52"><br><br>
 
-  <button onclick="calculate()">Calculate</button>
+  <button onclick="calculate()">Hitung</button>
 
   <div id="result"></div>
 
@@ -120,7 +120,7 @@
       const secretCode = getSecretCode(cardToCut);
 
       document.getElementById('result').innerText =
-        `The probability of your card in that position is 0.${cardToCutPos.toString().padStart(2, '0')}% and only ${secretCode} out of 10000 people have named this combination.`;
+        `Probabilitas Kartu Anda di Posisi Teresebut Adalah 0.${cardToCutPos.toString().padStart(2, '0')}% Dan hanya ${secretCode} dari of 10000 orang menyebutkan kombinasi ini.`;
     }
 
     function hideBottomCard() {
