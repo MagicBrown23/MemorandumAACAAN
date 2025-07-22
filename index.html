@@ -2,104 +2,166 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Leo's Heart</title>
+  <title>Leo's Secret</title>
   <style>
-    body {
+    html, body {
       margin: 0;
       padding: 0;
-      background: black;
-      color: red;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
       text-align: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .centered {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      flex-direction: column;
+      padding: 20px;
     }
-    h1 {
-      font-size: 2rem;
-      margin: 20px;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { opacity: 0.4; }
-      50% { opacity: 1; }
-      100% { opacity: 0.4; }
+    h1, h2 {
+      margin-bottom: 20px;
     }
     button {
-      background: red;
+      background: hotpink;
       color: white;
       border: none;
       padding: 15px 30px;
       font-size: 1.2rem;
       cursor: pointer;
-      margin-top: 30px;
-      border-radius: 8px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #ff69b4;
     }
     .hidden {
       display: none;
     }
+
+    /* Eerie Page */
+    #page1 {
+      background: black;
+      color: red;
+    }
+    #page1 h1 {
+      font-size: 2rem;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    /* Romantic Style */
+    .romantic {
+      background: pink;
+      color: deeppink;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Floating Hearts */
+    .heart {
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      animation: floatHearts 5s linear infinite;
+      clip-path: polygon(50% 0%, 100% 30%, 80% 100%, 20% 100%, 0% 30%);
+    }
+
+    @keyframes floatHearts {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+
     img {
-      max-width: 300px;
+      max-width: 250px;
       margin: 10px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #fff;
     }
   </style>
 </head>
 <body>
 
-  <audio autoplay loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
-  </audio>
-
-  <!-- PAGE 1 -->
-  <div id="page1">
+  <!-- EERIE PAGE -->
+  <div id="page1" class="centered">
     <h1>WARNING, DON'T PRESS THE BUTTON IF YOU DON'T WANT TO KNOW WHAT HAS LEO BEEN THINKING OF YOU</h1>
-    <button onclick="showPage2()">DON'T CLICK</button>
+    <button onclick="goToPage2()">DON'T CLICK</button>
   </div>
 
-  <!-- PAGE 2 -->
-  <div id="page2" class="hidden">
-    <!-- INSERT YOUR PHOTOS BELOW -->
-    <img src="https://via.placeholder.com/300x200.png?text=Photo+1" alt="photo1">
-    <img src="https://via.placeholder.com/300x200.png?text=Photo+2" alt="photo2">
-    <h2 style="color:white;">100 REASONS I LIKE YOU</h2>
-    <button onclick="showMessage(0)">START</button>
+  <!-- ROMANTIC PAGE 2: PHOTOS + POEM -->
+  <div id="page2" class="centered hidden romantic">
+    <div id="heartsContainer"></div>
+    <img src="https://via.placeholder.com/250x150.png?text=Photo+1" alt="photo1">
+    <img src="https://via.placeholder.com/250x150.png?text=Photo+2" alt="photo2">
+    <h2>100 REASONS I LIKE YOU</h2>
+    <p>(Poem goes here... you can add more text later)</p>
+    <button onclick="startMessages()">START</button>
   </div>
 
-  <!-- MESSAGE PAGES -->
-  <div id="messagePage" class="hidden">
-    <h2 id="messageText"></h2>
-    <button onclick="nextMessage()">NEXT</button>
+  <!-- ROMANTIC MESSAGE PAGES -->
+  <div id="messagePage" class="centered hidden romantic">
+    <div id="heartsContainer2"></div>
+    <div id="messageTextWrapper">
+      <h2 id="messageText"></h2>
+      <button onclick="nextMessage()">NEXT</button>
+    </div>
   </div>
 
   <script>
-    function showPage2() {
+    // Heart generator
+    function createHearts(containerId) {
+      const container = document.getElementById(containerId);
+      for (let i = 0; i < 50; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDelay = Math.random() * 5 + "s";
+        container.appendChild(heart);
+      }
+    }
+
+    function goToPage2() {
       document.getElementById('page1').classList.add('hidden');
       document.getElementById('page2').classList.remove('hidden');
+      createHearts('heartsContainer');
     }
 
     const messages = [
       "You are the prettiest dude I have dated in this past 2 years",
       "You are the chillest girl in Binong area"
     ];
-    let messageIndex = 0;
+    let currentMessage = 0;
 
-    function showMessage(index) {
+    function startMessages() {
       document.getElementById('page2').classList.add('hidden');
       document.getElementById('messagePage').classList.remove('hidden');
-      document.getElementById('messageText').innerText = messages[index];
+      createHearts('heartsContainer2');
+      document.getElementById('messageText').innerText = messages[currentMessage];
     }
 
     function nextMessage() {
-      messageIndex++;
-      if (messageIndex < messages.length) {
-        document.getElementById('messageText').innerText = messages[messageIndex];
+      currentMessage++;
+      if (currentMessage < messages.length) {
+        document.getElementById('messageText').innerText = messages[currentMessage];
       } else {
-        document.getElementById('messagePage').innerHTML = "<h2>I have more to tell you... but only in person 💌</h2>";
+        // Show final message with photo
+        const wrapper = document.getElementById('messageTextWrapper');
+        wrapper.innerHTML = `
+          <h2>And there's so much more and i will tell you in Person ... ❤️</h2>
+          <img src="C8EA275E-6E77-472B-B0AD-353A287D511E.jpeg" alt="Your beautiful face">
+        `;
       }
     }
   </script>
-
 </body>
 </html>
