@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Studi Tentang Probabilitas Kartu Pada Lokasi Tertentu</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: linear-gradient(to right, #232526, #414345);
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 1.4em;
+      margin-bottom: 20px;
+    }
+    select, input, button {
+      padding: 10px;
+      font-size: 1em;
+      margin: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+    #bottomCardSection {
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.1em;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.2em;
+      }
+      select, input, button {
+        width: 90%;
+        margin: 10px auto;
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Studi Tentang Probabilitas Kartu Pada Lokasi Tertentu</h1>
+
+  <div id="bottomCardSection">
+    <label for="bottomCard">Kartu Bawah:</label><br>
+    <select id="bottomCard" onchange="hideBottomCard()"></select>
+  </div>  
+
+  <br>
+  <label for="namedCard">Kartu Pilihan:</label><br>
+  <select id="namedCard"></select><br><br>
+
+  <label for="namedNumber">Angka Pilihan (1–52):</label><br>
+  <input type="number" id="namedNumber" min="1" max="52"><br><br>
+
+  <button onclick="calculate()">Hitung</button>
+
+  <div id="result"></div>
+
+  <script>
+    const memorandumStack = [
+      "J♠","7♣","10♥","A♦","4♣","7♥","4♦","A♠","4♥","7♦","4♠","A♥","10♦","7♠","J♣",
+      "K♦","10♠","8♣","J♥","A♣","K♠","5♣","8♥","3♦","Q♠","K♥","9♣","Q♥","6♣","9♥",
+      "2♦","3♣","6♥","5♦","2♠","3♥","8♦","5♠","K♣","J♦","8♠","10♣","2♣","5♥",
+      "6♦","3♠","2♥","9♦","6♠","Q♣","Q♦","9♠"
+    ];
+
+    const suits = ['♦', '♣', '♥', '♠'];
+    const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+    function populateSelects() {
+      const options = [];
+      for (let suit of suits) {
+        for (let rank of ranks) {
+          options.push(`${rank}${suit}`);
+        }
+      }
+      for (let id of ['bottomCard', 'namedCard']) {
+        const select = document.getElementById(id);
+        select.innerHTML = options.map(card => `<option value="${card}">${card}</option>`).join('');
+      }
+    }
+
+    function getStackIndex(card) {
+      return memorandumStack.indexOf(card) + 1;
+    }
+
+    function getSecretCode(card) {
+      const suitChar = card.slice(-1);
+      const rankStr = card.slice(0, -1);
+      const suitCode = {'♦': 1, '♣': 2, '♥': 3, '♠': 4}[suitChar];
+      const rankCode = {'A': 1, 'J': 11, 'Q': 12, 'K': 13}[rankStr] || parseInt(rankStr);
+      return suitCode * 100 + rankCode;
+    }
+
+    function calculate() {
+      const namedCard = document.getElementById('namedCard').value;
+      const namedNumber = parseInt(document.getElementById('namedNumber').value);
+      const bottomCard = window._hiddenBottomCard;
+
+      if (!namedCard || !namedNumber || !bottomCard) {
+        document.getElementById('result').innerText = "Please fill all fields.";
+        return;
+      }
+
+      const namedCardPos = getStackIndex(namedCard);
+      const bottomCardPos = getStackIndex(bottomCard);
+      const targetPos = namedCardPos - namedNumber;
+      const cardToCutPos = ((targetPos - bottomCardPos + 52) % 52) || 52;
+      const cardToCut = memorandumStack[(cardToCutPos - 1 + bottomCardPos) % 52];
+      const secretCode = getSecretCode(cardToCut);
+
+      document.getElementById('result').innerText =
+        `Probabilitas Kartu Anda di Posisi Tersebut Adalah 0.${cardToCutPos.toString().padStart(2, '0')}% Dan hanya ${secretCode} dari of 10000 orang menyebutkan kombinasi ini.`;
+    }
+
+    function hideBottomCard() {
+      const card = document.getElementById('bottomCard').value;
+      window._hiddenBottomCard = card;
+      const section = document.getElementById('bottomCardSection');
+      section.style.opacity = 0;
+      section.style.visibility = "hidden";
+    }
+
+    populateSelects();
+  </script>
+</body>
+</html>
